@@ -105,25 +105,6 @@ public class MainActivity extends AppCompatActivity {
     /*图片上传*/
     public void uploadPic(){
         webview.setWebChromeClient(new WebChromeClient() {
-
-            // For Android < 3.0
-            public void openFileChooser(ValueCallback<Uri> valueCallback) {
-                uploadMessage = valueCallback;
-                openImageChooserActivity();
-            }
-
-            // For Android  >= 3.0
-            public void openFileChooser(ValueCallback valueCallback, String acceptType) {
-                uploadMessage = valueCallback;
-                openImageChooserActivity();
-            }
-
-            //For Android  >= 4.1
-            public void openFileChooser(ValueCallback<Uri> valueCallback, String acceptType, String capture) {
-                uploadMessage = valueCallback;
-                openImageChooserActivity();
-            }
-
             // For Android >= 5.0
             @Override
             public boolean onShowFileChooser(WebView webView, ValueCallback<Uri[]> filePathCallback, WebChromeClient.FileChooserParams fileChooserParams) {
@@ -146,6 +127,7 @@ public class MainActivity extends AppCompatActivity {
         Intent i = new Intent(Intent.ACTION_GET_CONTENT);
         i.addCategory(Intent.CATEGORY_OPENABLE);
         i.setType("image/*");
+        i.putExtra(Intent.EXTRA_ALLOW_MULTIPLE,true);
         startActivityForResult(Intent.createChooser(i, "Image Chooser"), FILE_CHOOSER_RESULT_CODE);
     }
 
