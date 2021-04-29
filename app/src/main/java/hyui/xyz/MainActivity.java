@@ -58,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(this,"当前已获取读写存储权限", Toast.LENGTH_SHORT).show();
             return true;
         } else {
-            Toast.makeText(this,"请前往设置赋予本应用读写手机存储权限", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this,"请前往设置赋予本应用读写手机存储权限", Toast.LENGTH_LONG).show();
             return false;
         }
     }
