@@ -55,7 +55,14 @@ public class MainActivity extends AppCompatActivity {
     private boolean checkPermission() {
         int result = ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
         if (result == PackageManager.PERMISSION_GRANTED) {
-            Toast.makeText(this,"当前已获取读写存储权限", Toast.LENGTH_SHORT).show();
+            int createResult = CreateDir();
+            if (createResult == FileUtils.SUCCESS_FLAG) {
+                Toast.makeText(this, "当前已获取读写存储权限，下载路径为Download/Hpic", Toast.LENGTH_SHORT).show();
+            }else if (createResult == FileUtils.EXITS_FLAG){
+                Toast.makeText(this,"当前已获取读写存储权限，已有下载路径为Download/Hpic", Toast.LENGTH_SHORT).show();
+            }else{
+                Toast.makeText(this,"当前已获取读写存储权限，但下载路径未创建", Toast.LENGTH_SHORT).show();
+            }
             return true;
         } else {
             Toast.makeText(this,"请前往设置赋予本应用读写手机存储权限", Toast.LENGTH_LONG).show();
@@ -182,17 +189,26 @@ public class MainActivity extends AppCompatActivity {
 
     //下载功能
     private void SetDownload(){
+        final String dirname = "Hpic";
         webview.setDownloadListener(new DownloadListener() {
             @Override
             public void onDownloadStart(String url, String userAgent, String contentDisposition, String mimeType, long contentLength) {
                 String fileName = URLUtil.guessFileName(url, contentDisposition, mimeType);
                 String destPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
-                        .getAbsolutePath() + File.separator + fileName;
+                        .getAbsolutePath() + File.separator + dirname + File.separator + fileName;
                 System.out.println(destPath);
                 new DownloadTask().execute(url, destPath);
                 Toast.makeText(MainActivity.this,"下载完成，文件下载至"+destPath, Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    //创建目录
+    private int CreateDir(){
+        String dirname = "Hpic";
+        String dirpath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getAbsolutePath() + File.separator + dirname;
+        int result = FileUtils.CreateDir(dirpath);
+        return result;
     }
 
 }
