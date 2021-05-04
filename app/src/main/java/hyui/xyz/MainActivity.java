@@ -9,17 +9,16 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.KeyEvent;
-import android.view.View;
 import android.webkit.DownloadListener;
 import android.webkit.URLUtil;
 import android.webkit.ValueCallback;
 import android.webkit.WebChromeClient;
+import android.webkit.WebResourceRequest;
+import android.webkit.WebResourceResponse;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -89,6 +88,32 @@ public class MainActivity extends AppCompatActivity {
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
                 view.loadUrl(url);
                 return true;
+            }
+            //命中本地资源并替代
+            DataUtils mDataUtils = new DataUtils();
+            public WebResourceResponse shouldInterceptRequest (WebView view, String url){
+                if (mDataUtils.hasLocalResource(url)) {
+                    WebResourceResponse response = mDataUtils.getReplacedWebResourceResponse(getApplicationContext(),
+                            url);
+                    if (response != null) {
+                        return response;
+                    }
+                }
+                return super.shouldInterceptRequest(view, url);
+            }
+
+            @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+            public WebResourceResponse shouldInterceptRequest (WebView view, WebResourceRequest request) {
+                String url = request.getUrl().toString();
+                if (mDataUtils.hasLocalResource(url)) {
+                    WebResourceResponse response =
+                            mDataUtils.getReplacedWebResourceResponse(getApplicationContext(),
+                                    url);
+                    if (response != null) {
+                        return response;
+                    }
+                }
+                return super.shouldInterceptRequest(view, request);
             }
         });
         //加载网址
