@@ -4,11 +4,15 @@ import android.Manifest;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.ClipData;
+import android.content.ContentValues;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
+import android.provider.MediaStore;
+import android.provider.SyncStateContract;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -23,6 +27,7 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Toast;
+import org.apache.commons.io.FilenameUtils;
 
 
 import java.io.File;
@@ -228,9 +233,22 @@ public class MainActivity extends AppCompatActivity {
                         .getAbsolutePath() + File.separator + dirname + File.separator + fileName;
                 System.out.println(destPath);
                 new DownloadTask().execute(url, destPath);
+                File file = new File(destPath);
+                String fileType = FilenameUtils.getExtension(fileName).toLowerCase();
+                addImageGallery(file, fileType);
                 Toast.makeText(MainActivity.this,"下载完成，文件下载至"+destPath, Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    //保存后刷新相册
+    private void addImageGallery(File file, String fileType) {
+        ContentValues values = new ContentValues();
+        values.put(MediaStore.Images.Media.DATA, file.getAbsolutePath());
+        String type = "";
+        type = FileUtils.filesType(fileType);
+        values.put(MediaStore.Images.Media.MIME_TYPE, type);
+        getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
     }
 
     //创建目录

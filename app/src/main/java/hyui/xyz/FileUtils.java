@@ -28,4 +28,22 @@ public class FileUtils {
         Log.e(TAG,"创建[" + Path + "]失败");
         return FAILED_FLAG;
     }
+
+    public static String filesType(String fileType){
+        String type = "";
+        if (fileType.equals("jpg")){
+            type = "image/jpg";
+        }else if(fileType.equals("jpeg")){
+            type = "image/jpeg";
+        }else if(fileType.equals("gif")){
+            type = "image/gif";
+        }else if(fileType.equals("png")){
+            type = "image/png";
+        }else if(fileType.equals("bmp")){
+            type = "images/bmp";
+        }else{
+            type = null;
+        }
+        return type;
+    }
 }
