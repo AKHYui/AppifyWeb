@@ -26,5 +26,4 @@ dependencies {
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
     implementation group: 'commons-io', name: 'commons-io', version: '2.6'
-    implementation 'com.github.liangjingkanji:StatusBar:2.0.2'
 }
