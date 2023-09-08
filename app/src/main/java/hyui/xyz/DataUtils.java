@@ -23,6 +23,7 @@ public class DataUtils {
         String jsDir = "js/";
         String pngSuffix = ".png";
         String jpgSuffix = ".jpg";
+        /*
         mMap.put("https://pic.hyui.xyz/content/images/system/home_cover_1608377797525_c44007.jpg",
                 imgDir + "home_cover_1608377797525_c44007.jpg");
         mMap.put("https://pic.hyui.xyz/content/images/system/home_cover_1608377835213_ba1795.jpg",
@@ -43,6 +44,7 @@ public class DataUtils {
                 jsDir + "chevereto.min.js");
         mMap.put("https://ajax.cloudflare.com/cdn-cgi/scripts/7d0fa10a/cloudflare-static/rocket-loader.min.js",
                 jsDir + "rocket-loader.min.js");
+                */
     }
 
     public boolean hasLocalResource(String url){
