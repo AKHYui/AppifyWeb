@@ -127,7 +127,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         // 加载网址
-        String targetUrl = "https://manga.yuiit.top";
+        String targetUrl = "https://picware.yuiit.top";
         webview.loadUrl(targetUrl);
 
     }
