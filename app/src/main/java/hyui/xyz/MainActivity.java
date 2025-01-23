@@ -127,7 +127,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         // 加载网址
-        String targetUrl = "https://komga.hyui.xyz";
+        String targetUrl = "https://maniax.hyui.xyz";
         webview.loadUrl(targetUrl);
 
     }
