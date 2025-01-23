@@ -9,7 +9,7 @@
     </item>
     <!--启动页面logo-->
     <item android:bottom="2.5in">
-        <bitmap android:src="@drawable/ic_launcher_new"
+        <bitmap android:src="@drawable/ic_launcher"
             android:gravity="bottom|center_horizontal"/>
     </item>
     <!--启动页面logo-->
