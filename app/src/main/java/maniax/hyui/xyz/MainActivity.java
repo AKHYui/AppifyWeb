@@ -1,4 +1,4 @@
-package hyui.xyz;
+package maniax.hyui.xyz;
 
 import android.Manifest;
 import android.annotation.TargetApi;

@@ -1,4 +1,4 @@
-package hyui.xyz;
+package maniax.hyui.xyz;
 
 import android.content.Context;
 import android.text.TextUtils;
