@@ -1,4 +1,4 @@
-package maniax.hyui.xyz;
+package komga.hyui.xyz;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
@@ -21,6 +21,6 @@ public class ExampleInstrumentedTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getTargetContext();
 
-        assertEquals("maniax.hyui.xyz", appContext.getPackageName());
+        assertEquals("komga.hyui.xyz", appContext.getPackageName());
     }
 }

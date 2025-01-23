@@ -1,4 +1,4 @@
-package maniax.hyui.xyz;
+package komga.hyui.xyz;
 
 import android.Manifest;
 import android.annotation.TargetApi;
@@ -127,7 +127,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         // 加载网址
-        String targetUrl = "https://maniax.hyui.xyz";
+        String targetUrl = "https://komga.hyui.xyz";
         webview.loadUrl(targetUrl);
 
     }

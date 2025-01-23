@@ -1,4 +1,4 @@
-package maniax.hyui.xyz;
+package komga.hyui.xyz;
 
 import org.junit.Test;
 

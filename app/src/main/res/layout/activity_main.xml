@@ -4,7 +4,7 @@
     android:theme="@style/AppTheme.Launcher"
     android:orientation="vertical"
     android:layout_height="match_parent"
-    tools:context="maniax.hyui.xyz.MainActivity" >
+    tools:context="komga.hyui.xyz.MainActivity" >
 
 
         <WebView
