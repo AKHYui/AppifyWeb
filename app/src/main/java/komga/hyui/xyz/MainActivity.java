@@ -3,8 +3,10 @@ package komga.hyui.xyz;
 import android.Manifest;
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.ClipData;
 import android.content.ContentValues;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.media.MediaScannerConnection;
@@ -17,6 +19,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.KeyEvent;
+import android.view.inputmethod.EditorInfo;
 import android.webkit.DownloadListener;
 import android.webkit.URLUtil;
 import android.webkit.ValueCallback;
@@ -26,6 +29,7 @@ import android.webkit.WebResourceResponse;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.EditText;
 import android.widget.Toast;
 import org.apache.commons.io.FilenameUtils;
 
@@ -49,6 +53,7 @@ public class MainActivity extends AppCompatActivity {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+        showUrlSelectionDialog(); // 进入 APP 先弹出选择框
         setContentView(R.layout.activity_main);
         // 找到WebView的ID
         webview = (WebView) findViewById(R.id.webView1);
@@ -77,6 +82,87 @@ public class MainActivity extends AppCompatActivity {
             return false;
         }
     }
+
+    private void showUrlSelectionDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("选择要访问的网址");
+
+        // 选项列表
+        final String[] options = {"Komga", "Maniax", "Other"};
+        final String[] urls = {"https://komga.hyui.xyz", "https://maniax.hyui.xyz", ""}; // 其他选项初始为空
+        final int[] selectedIndex = {0}; // 默认选中第一个选项
+
+        builder.setSingleChoiceItems(options, 0, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                selectedIndex[0] = which;
+            }
+        });
+
+        builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if (selectedIndex[0] == 2) { // 选择了“其他”
+                    showCustomUrlInputDialog();
+                } else {
+                    loadWebView(urls[selectedIndex[0]]);
+                }
+            }
+        });
+
+        builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                finish(); // 退出应用
+            }
+        });
+
+        builder.setCancelable(false);
+        builder.show();
+    }
+
+    private void showCustomUrlInputDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("输入自定义网址");
+
+        final EditText input = new EditText(this);
+        input.setInputType(EditorInfo.TYPE_TEXT_VARIATION_URI);
+        input.setHint("请输入网址，如 https://example.com");
+        builder.setView(input);
+
+        builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                String url = input.getText().toString().trim();
+                if (!url.isEmpty()) {
+                    loadWebView(url);
+                } else {
+                    Toast.makeText(MainActivity.this, "网址不能为空", Toast.LENGTH_SHORT).show();
+                    showCustomUrlInputDialog(); // 重新弹出输入框
+                }
+            }
+        });
+
+        builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                showUrlSelectionDialog(); // 返回选项框
+            }
+        });
+
+        builder.setCancelable(false);
+        builder.show();
+    }
+
+    private void loadWebView(String url) {
+        setContentView(R.layout.activity_main);
+        webview = findViewById(R.id.webView1);
+        assert webview != null;
+        checkPermission();
+        WebviewSettings();
+        webview.loadUrl(url);
+    }
+
 
     // webview设定
     public void WebviewSettings() {
@@ -127,8 +213,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         // 加载网址
-        String targetUrl = "https://komga.hyui.xyz";
-        webview.loadUrl(targetUrl);
+        //String targetUrl = "https://komga.hyui.xyz";
+        //webview.loadUrl(targetUrl);
 
     }
 
@@ -137,7 +223,7 @@ public class MainActivity extends AppCompatActivity {
         webview.setDownloadListener(new DownloadListener() {
             @Override
             public void onDownloadStart(String url, String userAgent, String contentDisposition, String mimetype,
-                    long contentLength) {
+                                        long contentLength) {
                 Uri uri = Uri.parse(url);
                 Intent intent = new Intent(Intent.ACTION_VIEW, uri);
                 startActivity(intent);
@@ -151,7 +237,7 @@ public class MainActivity extends AppCompatActivity {
             // For Android >= 5.0
             @Override
             public boolean onShowFileChooser(WebView webView, ValueCallback<Uri[]> filePathCallback,
-                    WebChromeClient.FileChooserParams fileChooserParams) {
+                                             WebChromeClient.FileChooserParams fileChooserParams) {
                 /*
                  * uploadMessageAboveL = filePathCallback;
                  * openImageChooserActivity();
@@ -232,7 +318,7 @@ public class MainActivity extends AppCompatActivity {
         webview.setDownloadListener(new DownloadListener() {
             @Override
             public void onDownloadStart(String url, String userAgent, String contentDisposition, String mimeType,
-                    long contentLength) {
+                                        long contentLength) {
                 String fileName = URLUtil.guessFileName(url, contentDisposition, mimeType);
                 String destPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
                         .getAbsolutePath() + File.separator + dirname + File.separator + fileName;
