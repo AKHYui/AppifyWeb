@@ -8,52 +8,65 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 public class DataUtils {
-    private Map<String, String> mMap;
+    private Map<String, String> site1Map;
+    private Map<String, String> site2Map;
+    private Map<String, String> site3Map;
 
-    public DataUtils(){
-        mMap = new HashMap<>();
-        InitDatas();
+    public DataUtils() {
+        site1Map = new HashMap<>();
+        site2Map = new HashMap<>();
+        site3Map = new HashMap<>();
+        initSite1Data();
+        initSite2Data();
+        initSite3Data();
     }
 
-    private void InitDatas(){
-        String imgDir = "img/";
+    private void initSite1Data() {
         String cssDir = "css/";
         String jsDir = "js/";
-        String pngSuffix = ".png";
-        String jpgSuffix = ".jpg";
-        /*
-        mMap.put("https://pic.hyui.xyz/content/images/system/home_cover_1608377797525_c44007.jpg",
-                imgDir + "home_cover_1608377797525_c44007.jpg");
-        mMap.put("https://pic.hyui.xyz/content/images/system/home_cover_1608377835213_ba1795.jpg",
-                imgDir + "home_cover_1608377835213_ba1795.jpg");
-        mMap.put("https://pic.hyui.xyz/content/images/system/home_cover_1608377788916_cc2bcc.jpg",
-                imgDir + "home_cover_1608377788916_cc2bcc.jpg");
-        mMap.put("https://pic.hyui.xyz/content/images/system/home_cover_1608379871362_28c809.png",
-                imgDir + "home_cover_1608379871362_28c809.png");
-        mMap.put("https://pic.hyui.xyz/lib/Peafowl/peafowl.min.css?198068b3cdca651ae033a746f970a50d",
-                cssDir + "peafowl.min.css");
-        mMap.put("https://pic.hyui.xyz/app/themes/Peafowl/style.min.css?198068b3cdca651ae033a746f970a50d",
-                cssDir + "style.min.css");
-        mMap.put("https://pic.hyui.xyz/lib/Peafowl/js/scripts.min.js?198068b3cdca651ae033a746f970a50d",
-                cssDir + "scripts.min.js");
-        mMap.put("https://pic.hyui.xyz/lib/Peafowl/peafowl.min.js?198068b3cdca651ae033a746f970a50d",
-                jsDir + "peafowl.min.js");
-        mMap.put("https://pic.hyui.xyz/app/lib/chevereto.min.js?198068b3cdca651ae033a746f970a50d",
-                jsDir + "chevereto.min.js");
-        mMap.put("https://ajax.cloudflare.com/cdn-cgi/scripts/7d0fa10a/cloudflare-static/rocket-loader.min.js",
-                jsDir + "rocket-loader.min.js");
-                */
+        String fontDir = "fonts/";
+        String imgDir = "img/";
+
+        site1Map.put("https://komga.hyui.xyz/css/.*\\.css", cssDir + "$0");
+        site1Map.put("https://komga.hyui.xyz/js/.*\\.js", jsDir + "$0");
+        site1Map.put("https://komga.hyui.xyz/fonts/.*", fontDir + "$0");
+        site1Map.put("https://komga.hyui.xyz/img/.*\\.svg", imgDir + "$0");
     }
 
-    public boolean hasLocalResource(String url){
-        return mMap.containsKey(url);
+    private void initSite2Data() {
+        String cssDir = "css/";
+        String jsDir = "js/";
+        String fontDir = "fonts/";
+        String imgDir = "img/";
+
+        site2Map.put("https://maniax.hyui.xyz/css/.*\\.css", cssDir + "$0");
+        site2Map.put("https://maniax.hyui.xyz/js/.*\\.js", jsDir + "$0");
+        site2Map.put("https://maniax.hyui.xyz/fonts/.*", fontDir + "$0");
+        site2Map.put("https://maniax.hyui.xyz/img/.*\\.svg", imgDir + "$0");
     }
 
-    public WebResourceResponse getReplacedWebResourceResponse(Context context, String url){
-        String localResourcePath = mMap.get(url);
-        if (TextUtils.isEmpty(localResourcePath)){
+    private void initSite3Data() {
+        String cssDir = "css/";
+        String jsDir = "js/";
+        String fontDir = "fonts/";
+        String imgDir = "img/";
+
+        site3Map.put("https://komga.cn.171789.xyz:65367/css/.*\\.css", cssDir + "$0");
+        site3Map.put("https://komga.cn.171789.xyz:65367/js/.*\\.js", jsDir + "$0");
+        site3Map.put("https://komga.cn.171789.xyz:65367/fonts/.*", fontDir + "$0");
+        site3Map.put("https://komga.cn.171789.xyz:65367/img/.*\\.svg", imgDir + "$0");
+    }
+
+    public boolean hasLocalResource(String url) {
+        return site1Map.containsKey(url) || site2Map.containsKey(url) || site3Map.containsKey(url);
+    }
+
+    public WebResourceResponse getReplacedWebResourceResponse(Context context, String url) {
+        String localResourcePath = getLocalResourcePath(url);
+        if (TextUtils.isEmpty(localResourcePath)) {
             return null;
         }
         InputStream is = null;
@@ -63,17 +76,45 @@ public class DataUtils {
             e.printStackTrace();
             return null;
         }
-        String mimeType;
-        if (url.contains("css")){
-            mimeType = "text/css";
-        }else if(url.contains("jpg")){
-            mimeType = "image/jpeg";
-        }else if(url.contains("png")){
-            mimeType = "image/png";
-        }else{
-            mimeType = "text/javascript";
+        String mimeType = getMimeType(url);
+        return new WebResourceResponse(mimeType, "utf-8", is);
+    }
+
+    private String getLocalResourcePath(String url) {
+        String localPath = matchResource(url, site1Map);
+        if (TextUtils.isEmpty(localPath)) {
+            localPath = matchResource(url, site2Map);
         }
-        WebResourceResponse response = new WebResourceResponse(mimeType, "utf-8", is);
-        return response;
+        if (TextUtils.isEmpty(localPath)) {
+            localPath = matchResource(url, site3Map);
+        }
+        return localPath;
+    }
+
+    private String matchResource(String url, Map<String, String> siteMap) {
+        for (Map.Entry<String, String> entry : siteMap.entrySet()) {
+            String pattern = entry.getKey();
+            String localPath = entry.getValue();
+            if (Pattern.matches(pattern, url)) {
+                return localPath.replaceFirst(pattern, "");
+            }
+        }
+        return null;
+    }
+
+    private String getMimeType(String url) {
+        if (url.endsWith(".css")) {
+            return "text/css";
+        } else if (url.endsWith(".js")) {
+            return "application/javascript";
+        } else if (url.endsWith(".svg")) {
+            return "image/svg+xml";
+        } else if (url.endsWith(".js.map")) {
+            return "application/json";
+        } else if (url.endsWith(".woff") || url.endsWith(".woff2") || url.endsWith(".ttf") || url.endsWith(".otf")) {
+            return "application/font-woff";
+        } else {
+            return "application/octet-stream";
+        }
     }
 }
