@@ -89,7 +89,7 @@ public class MainActivity extends AppCompatActivity {
 
         // 选项列表
         final String[] options = {"Komga", "Maniax", "Komga-HK", "Other"};
-        final String[] urls = {"https://komga.hyui.xyz", "https://maniax.hyui.xyz", "https://komga.cn.hyui.xyz", ""}; // 其他选项初始为空
+        final String[] urls = {"https://komga.hyui.xyz", "https://maniax.hyui.xyz", "https://komga.hk.hyui.xyz", ""}; // 其他选项初始为空
         final int[] selectedIndex = {0}; // 默认选中第一个选项
 
         builder.setSingleChoiceItems(options, 0, new DialogInterface.OnClickListener() {
