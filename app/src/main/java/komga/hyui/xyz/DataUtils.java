@@ -56,11 +56,11 @@ public class DataUtils {
         String fontDir = "fonts/";
         String imgDir = "img/";
 
-        site3Map.put("https://komga.cn.171789.xyz:65367/css/.*\\.css", cssDir + "$0");
-        site3Map.put("https://komga.cn.171789.xyz:65367/js/.*\\.js", jsDir + "$0");
-        site3Map.put("https://komga.cn.171789.xyz:65367/js/.*\\.map", jsDir + "$0");
-        site3Map.put("https://komga.cn.171789.xyz:65367/fonts/.*", fontDir + "$0");
-        site3Map.put("https://komga.cn.171789.xyz:65367/img/.*\\.svg", imgDir + "$0");
+        site3Map.put("https://komga.hk.hyui.xyz/css/.*\\.css", cssDir + "$0");
+        site3Map.put("https://komga.hk.hyui.xyz/js/.*\\.js", jsDir + "$0");
+        site3Map.put("https://komga.hk.hyui.xyz/js/.*\\.map", jsDir + "$0");
+        site3Map.put("https://komga.hk.hyui.xyz/fonts/.*", fontDir + "$0");
+        site3Map.put("https://komga.hk.hyui.xyz/img/.*\\.svg", imgDir + "$0");
     }
 
     public boolean hasLocalResource(String url) {
