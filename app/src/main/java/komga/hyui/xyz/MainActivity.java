@@ -88,8 +88,8 @@ public class MainActivity extends AppCompatActivity {
         builder.setTitle("选择要访问的网址");
 
         // 选项列表
-        final String[] options = {"Komga", "Maniax", "Komga-HK", "Other"};
-        final String[] urls = {"https://komga.hyui.xyz", "https://maniax.hyui.xyz", "https://komga.hk.hyui.xyz", ""}; // 其他选项初始为空
+        final String[] options = {"Komga", "Maniax", "Komga-HK", "Maniax-HK", "Other"};
+        final String[] urls = {"https://komga.hyui.xyz", "https://maniax.hyui.xyz", "https://komga.hk.hyui.xyz", "https://maniax.hk.hyui.xyz", ""}; // 其他选项初始为空
         final int[] selectedIndex = {0}; // 默认选中第一个选项
 
         builder.setSingleChoiceItems(options, 0, new DialogInterface.OnClickListener() {
@@ -102,7 +102,7 @@ public class MainActivity extends AppCompatActivity {
         builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                if (selectedIndex[0] == 3) { // 选择了“其他”
+                if (selectedIndex[0] == 4) { // 选择了“其他”
                     showCustomUrlInputDialog();
                 } else {
                     loadWebView(urls[selectedIndex[0]]);

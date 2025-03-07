@@ -63,6 +63,19 @@ public class DataUtils {
         site3Map.put("https://komga.hk.hyui.xyz/img/.*\\.svg", imgDir + "$0");
     }
 
+    private void initSite4Data() {
+        String cssDir = "css/";
+        String jsDir = "js/";
+        String fontDir = "fonts/";
+        String imgDir = "img/";
+
+        site3Map.put("https://maniax.hk.hyui.xyz/css/.*\\.css", cssDir + "$0");
+        site3Map.put("https://maniax.hk.hyui.xyz/js/.*\\.js", jsDir + "$0");
+        site3Map.put("https://maniax.hk.hyui.xyz/js/.*\\.map", jsDir + "$0");
+        site3Map.put("https://maniax.hk.hyui.xyz/fonts/.*", fontDir + "$0");
+        site3Map.put("https://maniax.hk.hyui.xyz/img/.*\\.svg", imgDir + "$0");
+    }
+
     public boolean hasLocalResource(String url) {
         return site1Map.containsKey(url) || site2Map.containsKey(url) || site3Map.containsKey(url);
     }
