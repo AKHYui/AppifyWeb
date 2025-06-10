@@ -88,9 +88,9 @@ public class MainActivity extends AppCompatActivity {
         builder.setTitle("选择要访问的网址");
 
         // 选项列表
-        final String[] options = {"Komga", "Maniax", "Komga-HK", "Maniax-HK", "Komga-ZT(VPN组网)", "Maniax-ZT(VPN组网)",
+        final String[] options = {"Komga", "Maniax", "Komga-CN", "Maniax-CN", "Komga-ZT(VPN组网)", "Maniax-ZT(VPN组网)",
                 "Komga-Local(内网)", "Maniax-Local(内网)" ,"Other"};
-        final String[] urls = {"https://komga.hyui.xyz", "https://maniax.hyui.xyz", "https://komga.hk.hyui.xyz", "https://maniax.hk.hyui.xyz",
+        final String[] urls = {"https://komga.hyui.xyz", "https://maniax.hyui.xyz", "https://komga-cn.171789.xyz:53385", "https://maniax-cn.171789.xyz:53386",
                 "http://192.168.99.243:9004", "http://192.168.99.243:9005", "http://192.168.21.78:9004", "http://192.168.21.78:9005", ""}; // 其他选项初始为空
         final int[] selectedIndex = {0}; // 默认选中第一个选项
 
